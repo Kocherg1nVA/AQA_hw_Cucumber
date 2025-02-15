@@ -29,7 +29,7 @@ public class DataHelper {
         return new UserInfo("vasya", "qwerty123");
     }
 
-    public static VerificationCode getVerificationCode(UserInfo userInfo) {
+    public static VerificationCode getVerificationCode() {
         return new VerificationCode("12345");
     }
 
