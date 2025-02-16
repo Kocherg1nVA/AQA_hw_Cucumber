@@ -12,11 +12,6 @@ import ru.netology.page.LoginPage;
 import ru.netology.page.MoneyTransferPage;
 import ru.netology.page.VerificationPage;
 
-import static ru.netology.page.DashboardPage.addToFirstCard;
-import static ru.netology.page.LoginPage.validLogin;
-import static ru.netology.page.MoneyTransferPage.moneyTransfer;
-import static ru.netology.page.VerificationPage.validVerify;
-
 public class TemplateSteps {
 
     private static LoginPage loginPage;
@@ -28,16 +23,18 @@ public class TemplateSteps {
     public void LoginPage(String login, String password) {
         Configuration.browser = "firefox";
         loginPage = Selenide.open("http://localhost:9999", LoginPage.class);
-        verificationPage = validLogin(login, password);
-        dashboardPage = validVerify(DataHelper.getVerificationCode());
+        verificationPage = loginPage.validLogin(login, password);
+        dashboardPage = verificationPage.validVerify(DataHelper.getVerificationCode());
     }
-    @Когда("пользователь переводит {string} рублей с карты с номером 5559 0000 0000 0002 на свою 1 карту с главной страницы")
-    public void DashboardPage(String amount){
-        moneyTransferPage = addToFirstCard();
-        moneyTransfer(amount);
+
+    @Когда("пользователь переводит {string} рублей с карты номер {string} на свою 1 карту с главной страницы")
+    public void DashboardPage(String amount, String cardFrom) {
+        moneyTransferPage = dashboardPage.addToFirstCard();
+        moneyTransferPage.moneyTransfer(amount, cardFrom);
     }
+
     @Тогда("баланс его 1 карты из списка на главной странице должен стать {int} рублей")
-    public void checkBalanceFirstCard(int actual){
+    public void checkBalanceFirstCard(int actual) {
         var cardNumber = DataHelper.getFirstCard().getNumber();
         var expected = DashboardPage.getCardBalance(cardNumber);
         Assertions.assertEquals(expected, actual);

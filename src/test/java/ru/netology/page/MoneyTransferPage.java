@@ -4,8 +4,6 @@ import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
 
 import static com.codeborne.selenide.Selenide.$;
-import static ru.netology.data.DataHelper.getFirstCard;
-import static ru.netology.data.DataHelper.getSecondCard;
 
 public class MoneyTransferPage {
 
@@ -20,24 +18,13 @@ public class MoneyTransferPage {
         heading.shouldBe(Condition.visible);
     }
 
-    public static DashboardPage moneyTransfer(String amount) {
+    public DashboardPage moneyTransfer(String amount, String cardNumber) {
         amountField.setValue(amount);
-        cardFromField.setValue(selectCardFrom());
+        cardFromField.setValue(String.valueOf(cardNumber));
         addButton.click();
         return new DashboardPage();
     }
 
-    public static String selectCardFrom() {
-        String[] cards = new String[]{getFirstCard().getNumber(), getSecondCard().getNumber()};
-        String cardTo = disabledField.getValue().substring(15, 19);
-        String cardFrom = null;
-        for (String card : cards) {
-            if (!cardTo.equals(card.substring(15, 19))) {
-                cardFrom = card;
-            }
-        }
-        return cardFrom;
-    }
 
     public void amountMoreThanBalance() {
         errMsg.shouldHave(Condition.exactText("Ошибка! Недостаточно средств на счёте.")).shouldBe(Condition.visible);

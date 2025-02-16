@@ -33,7 +33,7 @@ public class DashboardPage {
         return Integer.parseInt(value);
     }
 
-    public static MoneyTransferPage addToFirstCard() {
+    public MoneyTransferPage addToFirstCard() {
         firstCardAddButton.click();
         return new MoneyTransferPage();
     }
