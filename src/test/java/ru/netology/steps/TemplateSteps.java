@@ -20,23 +20,21 @@ public class TemplateSteps {
     private static MoneyTransferPage moneyTransferPage;
 
     @Пусть("пользователь залогинен с именем {string} и паролем {string}")
-    public void LoginPage(String login, String password) {
+    public void loginPage(String login, String password) {
         Configuration.browser = "firefox";
         loginPage = Selenide.open("http://localhost:9999", LoginPage.class);
         verificationPage = loginPage.validLogin(login, password);
         dashboardPage = verificationPage.validVerify(DataHelper.getVerificationCode());
     }
 
-    @Когда("пользователь переводит {string} рублей с карты номер {string} на свою 1 карту с главной страницы")
-    public void DashboardPage(String amount, String cardFrom) {
-        moneyTransferPage = dashboardPage.addToFirstCard();
+    @Когда("пользователь переводит {string} рублей с карты номер {string} на свою {int} карту с главной страницы")
+    public void moneyTransfer(String amount, String cardFrom, int index) {
+        moneyTransferPage = dashboardPage.addToCard(index);
         moneyTransferPage.moneyTransfer(amount, cardFrom);
     }
 
-    @Тогда("баланс его 1 карты из списка на главной странице должен стать {int} рублей")
-    public void checkBalanceFirstCard(int actual) {
-        var cardNumber = DataHelper.getFirstCard().getNumber();
-        var expected = DashboardPage.getCardBalance(cardNumber);
-        Assertions.assertEquals(expected, actual);
+    @Тогда("баланс его {int} карты из списка на главной странице должен стать {int} рублей")
+    public void checkBalance(int index, int actual) {
+        Assertions.assertEquals(dashboardPage.getCardBalance(index), actual);
     }
 }

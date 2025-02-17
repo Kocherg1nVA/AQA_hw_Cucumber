@@ -6,7 +6,7 @@ import java.util.Random;
 
 public class DataHelper {
 
-    private DataHelper() {
+    public DataHelper() {
     }
 
     @Value
